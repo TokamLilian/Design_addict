@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300">
 
 <circle id="green-circle" r="20" cx="75" cy="112" fill="url(#pat1)">
-	<animate 
+	<!--animate 
 		attributeName="opacity" 
 		values="0;1;0" dur="3s"
-        repeatCount="indefinite" />
+        repeatCount="indefinite" /-->
 </circle>
 
 </svg>
