@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300">
 
-<circle cx="50" cy="60" r="20" />
+<circle cx="50" cy="50" r="25" stoke="white" />
 
 </svg>
