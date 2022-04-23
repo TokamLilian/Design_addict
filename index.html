@@ -5,27 +5,124 @@
         <title>Clock</title>
         <meta charset="UTF-8">
         <link rel="icon" href="assets/logo.svg"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
 
     <body>
-        <!--<style>
-                
-        </style>-->
 
-        <img src="assets/image.svg" />
+        <!--<img src="assets/image.svg"/>
 
-        <script src="script.js"></script>
+        <script src="script.js"></script> -->
 
-        <!--
-            <svg>
-                //exactly as in the file image.svg
-            </svg>
+        <style>
+            /*exactly as in the file image.svg*/ 
+        </style>
+    
+        <svg id="mySVG" version="1.1" viewBox="0  0 400 400" width="400" height="400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <!--exactly as in the file image.svg-->
             
-            <script>
-                //exactly as in the file script.js
-            </script>
-        -->
+                <circle id="inside-circle" cx="250" cy="210" r="200" fill="none" stroke="black" />
+                <circle id="outside-circle" cx="250" cy="210" r="165" fill="none" stroke="black" />
+
+                <path id="handMin" d="M 200 200 L 220 200  L 200 330 z" fill="black" stroke="none" transform="rotate(10 200 200)">
+                    <animateTransform 
+                        attributeName="transform"
+                        attrinuteType="XML"
+                        type="rotate"
+                        from="0 200 200"
+                        to="360 200 200"
+                        dur="3600s"
+                        repeatCount="indefinite" />
+                </path>
+
+                <path id="handSc" d="M 180 200 L 220 200  L 200 300 z" fill="red" stroke="none" transform="rotate(0 200 200)" />
+                
+                <g id="hours"></g>
+
+                <ellipse id="hourBox" cx="200" cy="120" rx="80" ry="50" fill="black" style="opacity:0.1;"/>
+                <text x="135" y="135" fill="red" font-family="Verdana" font-size="45" style="opacity: 0.7;">
+                    <tspan id="heureActu">21</tspan>:<tspan id="minuteActu">42</tspan>
+                </text>
+
+        </svg>
+
+        <script>
+            //exactly as in the file script.js
+
+            //change the x and y position of both circles
+            const svg = document.getElementById("mySVG");
+            var hn=document.getElementById("handSc");
+            var gHours=document.getElementById("hours");
+            var h=0;
+
+            var cxVal=200;
+            var cyVal=200;
+
+            gHours.setAttribute("transform","rotate(-90 "+cxVal+" "+cyVal+")");
+
+            circleOne=document.getElementById("inside-circle");
+            circleTwo=document.getElementById("outside-circle");
+            circleOne.setAttribute("cx",cxVal);
+            circleTwo.setAttribute("cx",cxVal);
+            circleOne.setAttribute("cy",cyVal);
+            circleTwo.setAttribute("cy",cyVal);
+
+            function stroke(rot) {
+                let dash = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                dash.setAttributeNS(null, "id", "dash");
+                dash.setAttributeNS(null, "d", "M 165 0 L 200 0");
+                dash.setAttributeNS(null, "transform", "translate("+cxVal+" "+cyVal+") rotate(+" + rot + " 0 0)");
+                dash.setAttributeNS(null, "fill", "none");
+                dash.setAttributeNS(null, "stroke", "black");
+                dash.setAttributeNS(null, "stroke-width", "5");
+                svg.appendChild(dash);
+            }
+
+            function numbers(num,rot) {
+                var number=document.createElementNS("http://www.w3.org/2000/svg", "text");
+                number.setAttribute("x",353);
+                number.setAttribute("y",200);
+                number.setAttribute("fill","red");
+                number.setAttribute("dominant-baseline","middle");
+                number.setAttribute("style","text-anchor:middle; font-family:Helvetica; font-weight: bold; font-size:20px;");
+                number.setAttribute("transform","rotate("+rot+" 200 200)");
+                var textNode=document.createTextNode(num);
+                number.appendChild(textNode);
+                gHours.appendChild(number);
+            }
+
+            function change() {
+                hn.setAttribute("transform","rotate("+h+" 200 200)");
+                h=h+2;
+            }
+
+            setInterval(change,1000);                    //change position of seconds hand every second 
+
+            for (var i = 0; i < 360; i += 10) stroke(i);
+            for (var i=1;i<=24;i++){
+                var rot=i*360/24;
+                numbers(""+i,rot);
+            } 
+
+            function updateTime() {
+                var now=new Date();
+                var epoch=now.getTime()/1000;
+                var h=now.getHours();
+                var m=now.getMinutes();
+                var s=now.getSeconds();
+
+                document.getElementById("heureActu").innerHTML=h;
+                document.getElementById("minuteActu").innerHTML=m;
+                //document.getElementById("secondeActu").innerHTML=s;
+            }
+
+            function initialise() {
+                setInterval(updateTime,1000);
+            }
+
+            window.onload=initialise;
+
+        </script>
     </body>
     
 </html>
