@@ -9,48 +9,33 @@
     </head>
 
     <body>
-
-        <!--<img src="assets/image.svg"/>
-
-        <script src="script.js"></script> -->
-
-        <style>
-            /*exactly as in the file image.svg*/ 
-        </style>
     
-        <svg id="mySVG" version="1.1" viewBox="0  0 400 400" width="400" height="400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <!--exactly as in the file image.svg-->
+        <svg id="mySVG" version="1.1" viewBox="0  0 500 500" width="600" height="400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             
                 <circle id="inside-circle" cx="250" cy="210" r="200" fill="none" stroke="black" />
                 <circle id="outside-circle" cx="250" cy="210" r="165" fill="none" stroke="black" />
-
-                <path id="handHr" d="M 200 200 L 220 200  L 200 330 z" fill="black" stroke="none" transform="rotate(10 200 200)">
-                    <!--animateTransform 
-                        attributeName="transform"
-                        attrinuteType="XML"
-                        type="rotate"
-                        from="0 200 200"
-                        to="360 200 200"
-                        dur="3600s"
-                        repeatCount="indefinite" /-->
-                </path>
-                <path id="one" d="M 10 20 L 10 50 M 10 50 L 7 60 M 10 50 L 13 60  M 10 20 L 7 10 M 10 20 L 13 10 z" fill="none" stroke="black"></path>
-                <path id="handSc" d="M 180 200 L 220 200  L 200 300 z" fill="red" stroke="none" transform="rotate(0 200 200)" />
-                
                 <g id="hours"></g>
 
-                <ellipse id="hourBox" cx="200" cy="120" rx="80" ry="50" fill="black" style="opacity:0.1;"/>
-                <text x="135" y="135" fill="red" font-family="Verdana" font-size="45" style="opacity: 0.7;">
-                    <tspan id="heureActu">?</tspan>:<tspan id="minuteActu">?</tspan>
-                </text>
+                <g id="path-and-hours">
+                    <path id="handSc" d="M 200 200 L 200 300 M 200 300 L 193 340 L 207 340 M 200 340 L 200 350 M 200 300 L 207 340 M 200 230 L 193 220 M 200 230 L 207 220 L 193 220 z" fill="none" stroke="black" transform="rotate(0 200 200)"></path>
+                    
+                    <path id="handHr" d="M 200 200 L 200 290 M 200 290 L 193 330 M 200 290 L 207 330 L 200 340 L 193 330 M 200 200 L 193 190 M 200 200 L 207 190 L 193 190 z" fill="none" stroke="black" transform="rotate(0 200 200)"></path>
+                    
+                    
+
+                    <ellipse id="hourBox" cx="200" cy="120" rx="80" ry="50" fill="black" style="opacity:0.1;"/>
+                    <text x="135" y="135" fill="red" font-family="Verdana" font-size="45" style="opacity: 0.7;">
+                        <tspan id="heureActu">?</tspan>:<tspan id="minuteActu">?</tspan>
+                    </text>
+                </g>
 
         </svg>
 
         <script>
-            //exactly as in the file script.js
 
-            //change the x and y position of both circles
+            
             const svg = document.getElementById("mySVG");
+            const other=document.getElementById("path-and-hours");
             var hd=document.getElementById("handHr");
             var hn=document.getElementById("handSc");
             var gHours=document.getElementById("hours");
@@ -59,19 +44,30 @@
             var cxVal=200;
             var cyVal=200;
 
-            gHours.setAttribute("transform","rotate(-90 "+cxVal+" "+cyVal+")");
-
+            //change the x and y position of both circles
             circleOne=document.getElementById("inside-circle");
+            var r=parseFloat(circleOne.getAttribute("r"));
+            
             circleTwo=document.getElementById("outside-circle");
+            circleTwo.setAttribute("fill","red");
+            circleTwo.setAttribute("style","opacity:0.1;")
             circleOne.setAttribute("cx",cxVal);
             circleTwo.setAttribute("cx",cxVal);
             circleOne.setAttribute("cy",cyVal);
             circleTwo.setAttribute("cy",cyVal);
 
+            var xVal=cxVal-r;
+            var yVal=cyVal-r;
+
+            other.setAttribute("transform","translate("+xVal+" "+yVal+")");
+            xVal=cyVal-r;
+            yVal=r-cxVal;
+            gHours.setAttribute("transform","translate("+xVal+" "+yVal+") rotate(-90 "+cxVal+" "+cyVal+")");
+
             function stroke(rot) {
                 let dash = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 dash.setAttributeNS(null, "id", "dash");
-                dash.setAttributeNS(null, "d", "M 165 0 L 200 0");
+                dash.setAttributeNS(null, "d", "M 165 0 L "+r+" 0");
                 dash.setAttributeNS(null, "transform", "translate("+cxVal+" "+cyVal+") rotate(+" + rot + " 0 0)");
                 dash.setAttributeNS(null, "fill", "none");
                 dash.setAttributeNS(null, "stroke", "black");
@@ -94,7 +90,7 @@
 
             function change() {
                 hn.setAttribute("transform","rotate("+h+" 200 200)");
-                h=h+2;
+                h=h+1;
             }
 
             setInterval(change,1000);                    //change position of seconds hand every second 
@@ -118,12 +114,14 @@
             }
 
             function initialise() {
+                //the digital time in the ellipse it updated every seconds
                 setInterval(updateTime,1000);
             }
 
             window.onload=initialise;
 
             var move=document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
+            //creation of the animateTransform and its attributes for the hour hand
             move.setAttribute("attributeName","transform");
             move.setAttribute("attributeType","XML");
             move.setAttribute("type","rotate");
@@ -135,8 +133,10 @@
             function updateHourHand() {
                 var now=new Date();
                 var h=now.getHours();
-                var val=(h-12)*15;
-                move.setAttribute("from",""+val+" 200 200");
+                var m=now.getMinutes();
+                var h=h+(m/60);                              //calculate the real time it is actually
+                var val=(h-12)*15;                           //every hour value covers an angle of 15 degrees from 12hours
+                move.setAttribute("from",""+val+" 200 200"); //position the hour hand at the right angle hence right time
             }
             
            
