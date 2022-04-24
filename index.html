@@ -24,24 +24,24 @@
                 <circle id="inside-circle" cx="250" cy="210" r="200" fill="none" stroke="black" />
                 <circle id="outside-circle" cx="250" cy="210" r="165" fill="none" stroke="black" />
 
-                <path id="handMin" d="M 200 200 L 220 200  L 200 330 z" fill="black" stroke="none" transform="rotate(10 200 200)">
-                    <animateTransform 
+                <path id="handHr" d="M 200 200 L 220 200  L 200 330 z" fill="black" stroke="none" transform="rotate(10 200 200)">
+                    <!--animateTransform 
                         attributeName="transform"
                         attrinuteType="XML"
                         type="rotate"
                         from="0 200 200"
                         to="360 200 200"
                         dur="3600s"
-                        repeatCount="indefinite" />
+                        repeatCount="indefinite" /-->
                 </path>
-
+                <path id="one" d="M 10 20 L 10 50 M 10 50 L 7 60 M 10 50 L 13 60  M 10 20 L 7 10 M 10 20 L 13 10 z" fill="none" stroke="black"></path>
                 <path id="handSc" d="M 180 200 L 220 200  L 200 300 z" fill="red" stroke="none" transform="rotate(0 200 200)" />
                 
                 <g id="hours"></g>
 
                 <ellipse id="hourBox" cx="200" cy="120" rx="80" ry="50" fill="black" style="opacity:0.1;"/>
                 <text x="135" y="135" fill="red" font-family="Verdana" font-size="45" style="opacity: 0.7;">
-                    <tspan id="heureActu">21</tspan>:<tspan id="minuteActu">42</tspan>
+                    <tspan id="heureActu">?</tspan>:<tspan id="minuteActu">?</tspan>
                 </text>
 
         </svg>
@@ -51,6 +51,7 @@
 
             //change the x and y position of both circles
             const svg = document.getElementById("mySVG");
+            var hd=document.getElementById("handHr");
             var hn=document.getElementById("handSc");
             var gHours=document.getElementById("hours");
             var h=0;
@@ -77,7 +78,7 @@
                 dash.setAttributeNS(null, "stroke-width", "5");
                 svg.appendChild(dash);
             }
-
+ 
             function numbers(num,rot) {
                 var number=document.createElementNS("http://www.w3.org/2000/svg", "text");
                 number.setAttribute("x",353);
@@ -121,6 +122,25 @@
             }
 
             window.onload=initialise;
+
+            var move=document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
+            move.setAttribute("attributeName","transform");
+            move.setAttribute("attributeType","XML");
+            move.setAttribute("type","rotate");
+            move.setAttribute("to","360 200 200");
+            move.setAttribute("dur","36000s")
+            move.setAttribute("repeatCount","indefinite");
+            updateHourHand()
+
+            function updateHourHand() {
+                var now=new Date();
+                var h=now.getHours();
+                var val=(h-12)*15;
+                move.setAttribute("from",""+val+" 200 200");
+            }
+            
+           
+            hd.appendChild(move);
 
         </script>
     </body>
